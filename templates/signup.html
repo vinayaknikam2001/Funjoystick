@@ -1,0 +1,84 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignUp</title>
+    <link rel="stylesheet" href="{% static 'styles/signup.css' %}">
+</head>
+
+<body>
+
+    {% for message in messages %}
+    <div class="alert alert-{{message.tags}} alert dismissible fade show" role="alert">
+        <strong>Message: </strong> {{message}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}
+
+
+    <!-- Registration form starts -->
+    <div id="form">{% csrf_token %}
+        <div id="switch">
+            <div class="form_btn" onclick="disp_login()">Login</div>
+            <div class="form_btn" onclick="disp_signin()">Signup</div>
+        </div>
+
+        <div id="login">
+            {% csrf_token %}
+            <form action="/signin" method="POST">{% csrf_token %}
+                <label for="">Username </label>
+                <input type="text" id="username" name="username" placeholder="Username alphanumeric" required>
+                <br><br>
+
+                <label for="">Password </label>
+                <input type="password" id="pass1" name="pass1" placeholder="Enter password" required>
+                <br><br>
+
+
+                <button type="submit" class="submit">Signin</button>
+            </form>
+
+        </div>
+        {% csrf_token %}
+        <div id="signup">
+            {% csrf_token %}
+            <form action="/signup" method="POST">{% csrf_token %}
+                <label for="">Username </label><br>
+                <input type="text" id="username" name="username" placeholder="Username alphanumeric" required>
+                <br><br>
+
+                <label for="">First name </label><br>
+                <input type="text" id="fname" name="fname" placeholder="Enter your first name" required>
+                <br><br>
+
+                <label for="">Last name </label><br>
+                <input type="text" id="lname" name="lname" placeholder="Enter your last name" required>
+                <br><br>
+
+                <label for="">Email adress </label><br>
+                <input type="email" id="email" name="email" placeholder="Enter your e-mail" required>
+                <br><br>
+
+                <label for="">Password </label><br>
+                <input type="password" id="pass1" name="pass1" placeholder="Enter password" required>
+                <br><br>
+
+                <label for="">Confirm Password </label><br>
+                <input type="password" id="pass2" name="pass2" placeholder="Confirm your password" required>
+                <br><br>
+
+                <button type="submit" class="submit">Signup</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="{% static 'scripts/signup.js' %}"></script>
+</body>
+
+</html>

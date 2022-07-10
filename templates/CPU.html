@@ -1,0 +1,434 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <style>
+        * {
+            margin: 0%;
+            padding: 0%;
+        }
+
+        body {
+            background-image: radial-gradient(circle, rgb(70, 131, 180), rgb(26, 65, 100), rgb(40, 5, 71));
+        }
+
+        #main {
+            display: flex;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #board {
+            display: grid;
+            border: 2px solid;
+            border-radius: 12px;
+            height: 97vmin;
+            width: 97vmin;
+            background-color: slategrey;
+            grid-template-columns: 32.4vmin 32.4vmin 32.4vmin;
+            /* filter: blur(3px); */
+            /*https://www.w3schools.com/howto/howto_css_blurred_background.asp */
+        }
+
+        .cell {
+            display: inline-grid;
+            color: rgb(40, 5, 71);
+            border: 2px solid black;
+            border-radius: 12px;
+            text-align: center;
+            align-items: center;
+            font-size: 25vmin;
+            font-style: italic;
+            padding: 0%;
+            /* https://www.w3schools.com/css/css_grid.asp */
+        }
+
+        #start {
+            display: flex;
+            border: 2px solid;
+            border-radius: 5px;
+            background-color: rgba(125, 230, 84, 0.4);
+            height: 85vmin;
+            width: 60vmin;
+            position: absolute;
+            z-index: 5;
+        }
+
+        #over {
+            display: flex;
+            border: 2px solid black;
+            border-radius: 5px;
+            background-color: rgba(125, 230, 84, 0.4);
+            height: 85vmin;
+            width: 60vmin;
+            color: black;
+            font-size: 8vmin;
+            position: absolute;
+            justify-content: center;
+        }
+
+        #game_over {
+            display: flex;
+            border: 2px solid black;
+            border-radius: 5px;
+            background-color: rgba(125, 230, 84, 0.4);
+            height: 85vmin;
+            width: 60vmin;
+            color: black;
+            font-size: 8vmin;
+            position: absolute;
+            justify-content: center;
+        }
+
+        #play_again {
+            display: flex;
+            font-size: 5vmin;
+            position: absolute;
+            top: 50vmin;
+            left: 17vmin;
+            border: 2px solid;
+            border-radius: 10px;
+            padding-left: 8px;
+            padding-right: 8px;
+            background-color: rgb(57, 170, 199);
+        }
+
+        #play_again:hover {
+            color: white;
+            background-color: black;
+            border-color: lawngreen;
+        }
+
+        #cpu {
+            display: flex;
+            font-size: 5vmin;
+            position: absolute;
+            top: 60vmin;
+            left: 13.5vmin;
+            border: 2px solid;
+            border-radius: 10px;
+            padding-left: 8px;
+            padding-right: 8px;
+            background-color: rgb(57, 170, 199);
+        }
+
+        a {
+            color: black;
+        }
+
+        #cpu:hover {
+            color: white;
+            background-color: black;
+            border-color: lawngreen;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="main">
+        <div id="board">
+            <div class="cell" id="cell1" onclick="cell1()" ontouchstart="cell1()">__</div>
+            <div class="cell" id="cell2" onclick="cell2()" ontouchstart="cell2()">__</div>
+            <div class="cell" id="cell3" onclick="cell3()" ontouchstart="cell3()">__</div>
+            <div class="cell" id="cell4" onclick="cell4()" ontouchstart="cell4()">__</div>
+            <div class="cell" id="cell5" onclick="cell5()" ontouchstart="cell5()">__</div>
+            <div class="cell" id="cell6" onclick="cell6()" ontouchstart="cell6()">__</div>
+            <div class="cell" id="cell7" onclick="cell7()" ontouchstart="cell7()">__</div>
+            <div class="cell" id="cell8" onclick="cell8()" ontouchstart="cell8()">__</div>
+            <div class="cell" id="cell9" onclick="cell9()" ontouchstart="cell9()">__</div>
+        </div>
+        <div id="game_over">
+            <div id="over"></div>
+            <a href="/tictactoe">
+                <div id="play_again" onclick="play_again()" ontouchstart="play_again()">Play Again</div>
+            </a>
+        </div>
+    </div>
+
+
+    <script>
+        //Loading audio
+        const x_sound = new Audio("{% static 'audio/TicTacToe/x.mp3' %}");
+        const o_sound = new Audio("{% static 'audio/TicTacToe/o.mp3' %}");
+
+        //Variables
+        let mark = ['X', 'O'];
+        let turn = 1, winner = 0, empty = 9, place = -1;
+
+        //Board lists
+        let empty_cell = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+        let cell_data = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+        let lock = [1, 1, 1, 1, 1, 1, 1, 1, 1];
+        let wins = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
+        //Time variables
+        let fps = 30;
+        var then = Date.now();
+        let game_state = 1;
+
+        //Game loop
+        function game_loop() {
+            now = Date.now();
+            var diffrence = now - then;
+            if (diffrence >= 1000 / fps) {
+                switch (game_state) {
+                    case 0:
+                        get_ready();
+                        break;
+                    case 1:
+                        game_on();
+                        break;
+                    case 2:
+                        game_over();
+                        break;
+                    default:
+                        break;
+                }
+                //Asigning new time value
+                then = now;
+            }
+            requestAnimationFrame(game_loop);
+        }//Ending game loop
+        game_loop();//Callling game loop
+
+
+
+        function game_on() {
+            document.getElementById('game_over').style.display = 'None';
+            document.getElementById('board').style.filter = 'blur(0px)';
+
+            if (turn) {
+                idx = ran(0, empty - 1);
+                tmp = empty_cell[idx];
+                cell_data[tmp - 1] = 1;
+                empty_cell.splice(idx, 1);
+                if (tmp == 1) {
+                    document.getElementById('cell1').style.color = "red";
+                    document.getElementById('cell1').innerHTML = 'X';
+                }
+                if (tmp == 2) {
+                    document.getElementById('cell2').style.color = "red";
+                    document.getElementById('cell2').innerHTML = 'X';
+                }
+                if (tmp == 3) {
+                    document.getElementById('cell3').style.color = "red";
+                    document.getElementById('cell3').innerHTML = 'X';
+                }
+                if (tmp == 4) {
+                    document.getElementById('cell4').style.color = "red";
+                    document.getElementById('cell4').innerHTML = 'X';
+                }
+                if (tmp == 5) {
+                    document.getElementById('cell5').style.color = "red";
+                    document.getElementById('cell5').innerHTML = 'X';
+                }
+                if (tmp == 6) {
+                    document.getElementById('cell6').style.color = "red";
+                    document.getElementById('cell6').innerHTML = 'X';
+                }
+                if (tmp == 7) {
+                    document.getElementById('cell7').style.color = "red";
+                    document.getElementById('cell7').innerHTML = 'X';
+                }
+                if (tmp == 8) {
+                    document.getElementById('cell8').style.color = "red";
+                    document.getElementById('cell8').innerHTML = 'X';
+                }
+                if (tmp == 9) {
+                    document.getElementById('cell9').style.color = "red";
+                    document.getElementById('cell9').innerHTML = 'X';
+                }
+                // x_sound.play();
+                turn = 0;
+                place = -1;
+                empty -= 1;
+                
+            }
+            else {
+                if (place == 1 && empty_cell.includes(place)) {
+                    document.getElementById('cell1').style.color = "darkgreen";
+                    document.getElementById('cell1').innerHTML = 'O';
+                    o_sound.play();
+                    turn = 1;
+                    idx = empty_cell.indexOf(place);
+                    empty_cell.splice(idx, 1);
+                    empty -= 1;
+                    cell_data[0] = -1;
+                }
+                if (place == 2 && empty_cell.includes(place)) {
+                    document.getElementById('cell2').style.color = "darkgreen";
+                    document.getElementById('cell2').innerHTML = 'O';
+                    o_sound.play();
+                    turn = 1;
+                    idx = empty_cell.indexOf(place);
+                    empty_cell.splice(idx, 1);
+                    empty -= 1;
+                    cell_data[1] = -1;
+                }
+                if (place == 3 && empty_cell.includes(place)) {
+                    document.getElementById('cell3').style.color = "darkgreen";
+                    document.getElementById('cell3').innerHTML = 'O';
+                    o_sound.play();
+                    turn = 1;
+                    idx = empty_cell.indexOf(place);
+                    empty_cell.splice(idx, 1);
+                    empty -= 1;
+                    cell_data[2] = -1;
+                }
+                if (place == 4 && empty_cell.includes(place)) {
+                    document.getElementById('cell4').style.color = "darkgreen";
+                    document.getElementById('cell4').innerHTML = 'O';
+                    o_sound.play();
+                    turn = 1;
+                    idx = empty_cell.indexOf(place);
+                    empty_cell.splice(idx, 1);
+                    empty -= 1;
+                    cell_data[3] = -1;
+                }
+                if (place == 5 && empty_cell.includes(place)) {
+                    document.getElementById('cell5').style.color = "darkgreen";
+                    document.getElementById('cell5').innerHTML = 'O';
+                    o_sound.play();
+                    turn = 1;
+                    idx = empty_cell.indexOf(place);
+                    empty_cell.splice(idx, 1);
+                    empty -= 1;
+                    cell_data[4] = -1;
+                }
+                if (place == 6 && empty_cell.includes(place)) {
+                    document.getElementById('cell6').style.color = "darkgreen";
+                    document.getElementById('cell6').innerHTML = 'O';
+                    o_sound.play();
+                    turn = 1;
+                    idx = empty_cell.indexOf(place);
+                    empty_cell.splice(idx, 1);
+                    empty -= 1;
+                    cell_data[5] = -1;
+                }
+                if (place == 7 && empty_cell.includes(place)) {
+                    document.getElementById('cell7').style.color = "darkgreen";
+                    document.getElementById('cell7').innerHTML = 'O';
+                    o_sound.play();
+                    turn = 1;
+                    idx = empty_cell.indexOf(place);
+                    empty_cell.splice(idx, 1);
+                    empty -= 1;
+                    cell_data[6] = -1;
+                }
+                if (place == 8 && empty_cell.includes(place)) {
+                    document.getElementById('cell8').style.color = "darkgreen";
+                    document.getElementById('cell8').innerHTML = 'O';
+                    o_sound.play();
+                    turn = 1;
+                    idx = empty_cell.indexOf(place);
+                    empty_cell.splice(idx, 1);
+                    empty -= 1;
+                    cell_data[7] = -1;
+                }
+                if (place == 9 && empty_cell.includes(place)) {
+                    document.getElementById('cell9').style.color = "darkgreen";
+                    document.getElementById('cell9').innerHTML = 'O';
+                    o_sound.play();
+                    turn = 1;
+                    idx = empty_cell.indexOf(place);
+                    empty_cell.splice(idx, 1);
+                    empty -= 1;
+                    cell_data[8] = -1;
+                }
+            }
+            //Checking for winner
+            check();
+            //Checking for Draw
+            if (empty == 0) {
+                game_state = 2;
+            }
+
+
+        }//Ending game_on funtion
+
+
+        //Accepting input functions
+        function cell1() {
+            place = 1
+        }
+        function cell2() {
+            place = 2
+        }
+        function cell3() {
+            place = 3
+        }
+        function cell4() {
+            place = 4
+        }
+        function cell5() {
+            place = 5
+        }
+        function cell6() {
+            place = 6
+        }
+        function cell7() {
+            place = 7
+        }
+        function cell8() {
+            place = 8
+        }
+        function cell9() {
+            place = 9
+        }//Ending all input accepting functions
+
+
+        //Randon number function
+        function ran(a, b) {
+            var c = Math.round(a + (b - a) * Math.random());
+            return c;
+        }//Ending random number function
+
+
+        //Checking for winner
+        function check() {
+            for (i = 0; i < 8; i += 1) {
+                x = wins[i][0]
+                y = wins[i][1]
+                z = wins[i][2]
+                if (cell_data[x] === cell_data[y] && cell_data[y] === cell_data[z]) {
+                    if (cell_data[x] == 1) {
+                        winner = 1;
+                        game_state = 2;
+
+                    }
+                    else if (cell_data[x] == -1) {
+                        winner = 2;
+                        game_state = 2;
+
+                    }
+                }
+            }
+        }//Ending checking for winner function
+
+
+
+
+        //Game over function
+        function game_over() {
+            //Displaying the start menu
+            document.getElementById('game_over').style.display = 'flex';
+            document.getElementById('board').style.filter = 'blur(3px)';
+
+            //Displaying result of match
+            if (winner === 0)
+                document.getElementById('over').innerHTML = 'Draw!';
+            else if (winner === 1)
+                document.getElementById('over').innerHTML = 'CPU won game!';
+            else
+                document.getElementById('over').innerHTML = 'You won game!';
+
+        }//Ending game over function
+    </script>
+</body>
+
+</html>

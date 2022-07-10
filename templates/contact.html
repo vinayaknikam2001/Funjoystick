@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <link rel="stylesheet" href="{% static 'styles/contact.css' %}">
+</head>
+
+<body>
+
+    {% include 'navbar.html' %}
+    
+    <div class="contact">
+        <div id="contact_form">
+            <div id="label">Contact FunJoystick</div>
+            <form action="contact" method="post">
+                {% csrf_token %}
+                <label for="">Your Name : </label>
+                <input type="text" id="name" name="first_name" placeholder="Your name goes here" required>
+                <br><br>
+
+                <label for="">Phone No. : </label>
+                <input type="text" id="phone" name="phone" placeholder="Your mobile no." required>
+                <br><br>
+
+                <label for="">E-mail : </label>
+                <input type="text" id="email" name="email" placeholder="Your e-mail" required>
+                <br><br>
+
+                <label for="">Your query/feedback : </label><br>
+                <textarea id="query" name="query" placeholder="Your query goes here" required rows="5"
+                    cols="35"></textarea>
+                <br><br>
+
+                <button id="submit_btn" type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+
+</html>

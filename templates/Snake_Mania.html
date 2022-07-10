@@ -1,0 +1,393 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Mania</title>
+
+    <style>
+        #joystick {
+
+            height: 200px;
+            width: 200px;
+            background-image: url("{% static 'img/Snake_Mania/btn.png' %}");
+            background-repeat: no-repeat;
+            margin-top: 10px;
+            background-size: contain;
+        }
+
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        body {
+            background-image: radial-gradient(circle, rgb(117, 172, 218), rgb(55, 85, 114), rgb(0, 31, 65));
+        }
+
+        .main_body {
+
+            display: flex;
+            justify-content: center;
+
+            flex-wrap: wrap;
+        }
+
+        #score_board {
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            padding: 5px;
+            background: black;
+            color: lawngreen;
+            font-size: 30px;
+            border-radius: 17px;
+        }
+
+        #game_board {
+            background: grey;
+            height: 92vmin;
+            width: 92vmin;
+            border: 3px solid;
+            border-radius: 15px;
+            display: grid;
+            grid-template-rows: repeat(26, 1fr);
+            grid-template-columns: repeat(26, 1fr);
+            margin-top: 20px;
+        }
+
+        #msg {
+            height: 80px;
+            width: 350px;
+            border: 2px solid black;
+            border-radius: 15px;
+            position: absolute;
+            background-color: darkslategray;
+            color: yellow;
+            font-size: 30px;
+            text-align: center;
+            margin-top: 300px;
+        }
+
+        #gameover {
+            height: 100px;
+            width: 350px;
+            border: 2px solid black;
+            border-radius: 15px;
+            position: absolute;
+            background-color: darkslategray;
+            color: yellow;
+            font-size: 30px;
+            text-align: center;
+            margin-top: 300px;
+        }
+
+        .head {
+            background-color: black;
+            border: 2px solid red;
+            border-radius: 13px;
+            transform: scale(1.03);
+        }
+
+        .body {
+            background-color: slateblue;
+            border: 2px solid;
+            border-radius: 13px;
+        }
+
+        .food {
+            background-color: crimson;
+            border: 2px solid;
+            border-radius: 13px;
+        }
+
+        #controls {
+            display: none;
+            justify-content: center;
+            margin-top: 0px;
+
+        }
+
+
+        #btn {
+            /* border: 1px solid black; */
+            position: relative;
+        }
+
+        .btn1 {
+            left: 37%;
+            height: 70px;
+            width: 50px;
+        }
+
+        .btn2 {
+            left: 63%;
+            top: 1%;
+            height: 50px;
+            width: 72px;
+        }
+
+        .btn3 {
+            top: -25%;
+            height: 50px;
+            width: 70px;
+        }
+
+        .btn4 {
+            left: 37%;
+            top: -25%;
+            height: 72px;
+            width: 50px;
+        }
+
+        @media screen and (max-width: 650px) {
+            #game_board {
+                margin-top: 10vh;
+            }
+
+            #msg {
+                margin-top: 250px;
+            }
+
+            #gameover {
+                margin-top: 250px;
+            }
+
+            #controls {
+                display: flex;
+            }
+        }
+
+        @media screen and (max-width: 950px) {
+            #game_board {
+                margin-top: 13vh;
+            }
+
+            #controls {
+                display: flex;
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <div class="main_body">
+
+        <div id="score_board">Score : 0</div>
+        <div id="msg" ontouchstart="get_ready()" onclick="get_ready()">Click anywhere to <br> continue..</div>
+        <div id="gameover" ontouchstart="game_over()" onclick="game_over()">Game Over !<br> Click anywhere to play again
+        </div>
+        <div id="game_board"></div>
+    </div>
+
+
+    <div id="controls">
+        <div id="joystick">
+            <div class="btn1" id="btn" ontouchstart="up()"></div>
+            <div class="btn2" id="btn" ontouchstart="right()"></div>
+            <div class="btn3" id="btn" ontouchstart="left()"></div>
+            <div class="btn4" id="btn" ontouchstart="down()"></div>
+        </div>
+    </div>
+
+    <script>
+        //Game constants
+        let direction = { x: 1, y: 0 };
+
+        //Loading audio files
+        const food_sound = new Audio("{% static 'audio/Snake_Mania/food.mp3' %}");
+        const die_sound = new Audio("{% static 'audio/Snake_Mania/die.wav' %}");
+
+
+        //Loading game variables
+        let speed = 6;
+        let pretime = 0;
+        let snake = [{ x: 3, y: 3 }];
+        let food = { x: 10, y: 12 };
+        let score = 0
+        let startingx, startingy, movingx, movingy, game_state = 0;
+
+
+        //Function names
+        function main(ctime) {
+            window.requestAnimationFrame(main);
+            //console.log(ctime)
+            if ((ctime - pretime) / 1000 < (1 / speed)) {
+                return;
+            }
+
+            if (game_state === 0) {
+                get_ready();
+            }
+            else if (game_state === 1) {
+                game_on();
+            }
+            else if (game_state === 2) {
+                game_over();
+            }
+            pretime = ctime;
+        }
+
+        function game_on() {
+            //Erasing message box 
+            document.getElementById("msg").style.display = "none";
+            document.getElementById("gameover").style.display = "none";
+            //Enabling touchscreen event listeners if device if small screen
+            if (screen.width < 900) {
+                document.getElementById("controls").style.display = "flex";
+            }
+
+            if (is_collide(snake)) {
+                // gameover_sound.play();
+                die_sound.play();
+                direction = { x: 1, y: 0 };
+                snake = [{ x: 2, y: 3 }];
+
+                //To show clearly snake is collided
+                var past = Date.now();
+                var present = past;
+                while (present - past < 2000) {
+                    present = Date.now();
+                }
+                game_state = 2;
+
+
+            }
+
+            if (snake[0].x === food.x && snake[0].y === food.y) {
+                food_sound.play()
+                snake.unshift({ x: snake[0].x + direction.x, y: snake[0].y + direction.y })
+                let a = 2;
+                let b = 24;
+                food = { x: Math.round(a + (b - a) * Math.random()), y: Math.round(a + (b - a) * Math.random()) };
+                score += 1
+            }
+            for (let i = snake.length - 2; i >= 0; i--) {
+                /*This "..." operator called spread syntax used to make shallow copy of object
+                https://codeburst.io/what-are-three-dots-in-javascript-6f09476b03e1  */
+                snake[i + 1] = { ...snake[i] };
+            }
+
+            snake[0].x += direction.x;
+            snake[0].y += direction.y;
+
+            score_board.innerHTML = "Score :" + score;
+            game_board.innerHTML = "";
+
+            food_item = document.createElement("div");
+            food_item.style.gridRowStart = food.y;
+            food_item.style.gridColumnStart = food.x;
+            food_item.classList.add("food");
+            game_board.appendChild(food_item);
+
+            snake.forEach((lst, index) => {
+                snake_item = document.createElement("div");
+                snake_item.style.gridRowStart = lst.y;
+                snake_item.style.gridColumnStart = lst.x;
+                if (index === 0) {
+                    snake_item.classList.add("head")
+                }
+                else {
+                    snake_item.classList.add("body")
+                }
+                game_board.appendChild(snake_item);
+            });
+
+        }
+
+        function is_collide(snake) {
+            for (let i = 1; i < snake.length; i++) {
+                if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) {
+                    return true;
+                }
+            }
+            if (snake[0].x >= 26 || snake[0].x <= 1 || snake[0].y >= 26 || snake[0].y <= 1) {
+                return true;
+            }
+            return false;
+        }
+
+        window.requestAnimationFrame(main);
+        window.addEventListener("keydown", k => {
+            direction = { x: 0, y: 1 };
+            switch (k.key) {
+                case "ArrowUp":
+                    direction.x = 0;
+                    direction.y = -1;
+                    break;
+                case "ArrowDown":
+                    direction.x = 0;
+                    direction.y = 1;
+                    break;
+                case "ArrowLeft":
+                    direction.x = -1;
+                    direction.y = 0;
+                    break;
+                case "ArrowRight":
+                    direction.x = 1;
+                    direction.y = 0;
+                    break;
+
+                default:
+                    break;
+            }
+        });
+        function up() {
+
+            direction.x = 0;
+            direction.y = -1;
+        }
+        function down() {
+
+            direction.x = 0;
+            direction.y = 1;
+        }
+        function left() {
+
+            direction.x = -1;
+            direction.y = 0;
+        }
+        function right() {
+
+            direction.x = 1;
+            direction.y = 0;
+        }
+
+        //Get ready to play
+        function get_ready() {
+            //Disabling other touch screen event listners
+            document.getElementById("msg").style.display = "block";
+            document.getElementById("gameover").style.display = "none";
+            document.getElementById("controls").style.display = "none";
+            window.addEventListener("click", k => {
+                game_state = 1;
+
+            });
+        }
+
+        //Game over 
+        function game_over() {
+            //Disabling other screen event listners
+            document.getElementById("gameover").style.display = "block";
+            document.getElementById("gameover").innerHTML = "Game Over ! <br>Your Score is : "+score+"<br> Tap to Play Again ";
+            document.getElementById("msg").style.display = "none";
+            document.getElementById("controls").style.display = "none";
+            window.addEventListener("click", k => {
+                game_state = 0;
+                score = 0;
+            });
+        }
+
+
+    </script>
+
+
+</body>
+
+</html>

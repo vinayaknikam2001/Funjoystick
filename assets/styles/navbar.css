@@ -1,0 +1,163 @@
+*{
+    padding: 0%;
+    margin: 0%;
+    text-decoration: none;
+    list-style: none;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+/* Navbar start */
+body{
+    background-image: radial-gradient(circle ,rgb(90, 70, 180) ,rgb(39, 18, 97) ,rgb(20, 8, 73));
+}
+
+#logo{
+    height: 70px;
+    width: 90px;
+    position: absolute;
+    top: 0px;
+    left:  10px;
+}
+#logo2{
+    height: 70px;
+    width: 90px;
+    position: absolute;
+    top: 0px;
+    left:  10px;
+    display: none;
+}
+
+/* Primary Navbar */
+#navbar{
+    background-color: rgb(22,24,26);
+    color: white;
+    display: flex;
+    flex-direction: row;
+}
+#icon{
+    font-size: 24px;
+    padding: 12px;
+    margin-left: 100px;
+}
+#icon:hover{
+    color: lawngreen;
+}
+#list{
+    display: flex;
+    flex-direction: row;
+    margin-top: 15px;
+}
+.items{
+    color: white;
+    font-size: 20px;
+    padding: 10px;
+}
+.items:hover{
+    color: lawngreen;
+}
+
+
+/* Secondary Navbar*/
+#navbar2{
+    background-color: rgb(22,24,26);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    display: none;
+
+}
+#icon2{
+    font-size: 20px;
+    padding: 4px;
+    position: absolute;
+    top: 10px;
+    left: 100px;
+
+}
+.icon2:hover{
+    color: lawngreen;
+}
+#list2{
+    margin-top: 50px;
+}
+.items2{
+    color: white;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+.items2:hover{
+    color: lawngreen;
+}
+
+
+
+/* Open Button  */
+#open{
+    display: none;
+    flex-direction: column;
+    height: 40px;
+    width: 40px;
+    position: absolute;
+    right: 20px;
+    top: 8px;
+}
+
+.bar{
+    border: 1px solid slateblue ;
+    border-radius: 5px;
+    margin-top: 5px;
+    height: 6px;
+    width: 35px;
+    background-color: white;
+
+}
+
+/* Close Button  */
+#close{
+    display: none;
+    flex-direction: column;
+    height: 40px;
+    width: 40px;
+    position: absolute;
+    right: 20px;
+    top: 12px;
+}
+
+.bar2{
+    
+    border: 1px solid slateblue ;
+    border-radius: 5px;
+    margin-top: 5px;
+    height: 6px;
+    width: 35px;
+    background-color: white;
+    transform: translateY(-5px) rotate(-45deg);
+}
+
+.bar1{
+    border: 1px solid slateblue ;
+    border-radius: 5px;
+    margin-top: 5px;
+    height: 6px;
+    width: 35px;
+    background-color: white;
+    transform: translateY(5px) rotate(45deg);
+}
+
+
+
+/* Refrence 
+https://stackoverflow.com/questions/35393429/how-to-get-current-screen-width-in-css/35395020 */
+
+@media screen and (max-width: 802px) {
+    div#list{
+        display: none;
+    }
+    div#open{
+        display: flex;
+    }
+    
+}
+/* Navbar complete */

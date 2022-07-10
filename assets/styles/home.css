@@ -1,0 +1,134 @@
+*{
+    padding: 0%;
+    margin: 0%;
+    text-decoration: none;
+    list-style: none;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+body{
+    background-image: radial-gradient(circle ,rgb(90, 70, 180) ,rgb(39, 18, 97) ,rgb(20, 8, 73));
+    color: white;
+}
+
+
+
+#elements{
+    display: flex;
+    
+    justify-content: center;
+    
+    align-items: center;
+    flex-wrap: wrap;
+    flex-direction: column;
+
+}
+.login{
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+	margin-bottom: 30px;
+}
+.logout{
+    display: flex;
+    justify-content: center;
+	margin-bottom: 30px;
+    margin-top: 50px;
+}
+
+#registration{
+    background-color: rgb(22, 24, 26);
+    color: white;
+    border: 1px solid white;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 30px;
+
+}
+
+#registration:hover{
+    color: lawngreen;
+}
+
+#quote{
+    color: orange;
+    display: flex;  
+    font-size: 45px;
+    font-style: italic;
+    
+    text-align: center;
+}
+
+
+/* .shape img{
+	position: absolute;
+	width: 100%;
+	z-index: -9;
+}
+.shape .shape1{
+	right: -160px;
+	top: -50px;
+	width: 450px;
+	opacity: .5;
+	transform-origin: center;
+	animation: shape linear 30s infinite reverse;
+}
+.shape .shape2{
+	left: -70px;
+	bottom: -50px;
+	width: 450px;
+	opacity: .5;
+	transform-origin: center;
+	animation: shape linear 30s infinite reverse;
+}
+@keyframes shape{
+	100%{
+		transform:  rotate(45deg);
+	}
+}
+
+.shape .shape3{
+	top: 0;
+	left: 0;
+	width: 250px;
+	opacity: .4;
+	transform-origin: center;
+	animation: shape3 linear 20s infinite;
+	transform: translate(-200px, -100px) rotate(0deg);
+}
+@keyframes shape3{
+	100%{
+		transform: translate(1300px, 600px) rotate(360deg);
+	}	
+}
+
+.shape .shape4{
+	left: 0;
+	bottom: 0;
+	width: 150px;
+	opacity: .4;
+	transform-origin: center;
+	animation: shape4 linear 20s infinite 5s;
+	transform: translate(700px, 80px) rotate(0deg);
+}
+@keyframes shape4{
+	100%{
+		transform: translate(1200px, -800px) rotate(360deg);
+	}
+}
+
+.shape .shape5{
+	left: 500px;
+	top: 0;
+	width: 100px;
+	opacity: 0;
+	transform-origin: center;
+	animation: shape5 linear 25s infinite;
+	transform: translate(0, -150px) rotate(0deg);
+}
+@keyframes shape5{
+	100%{
+		opacity: 1;
+		transform: translate(0, 800px) rotate(720deg);
+	}
+} */

@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="{% static 'styles/navbar.css' %}">
+
+</head>
+
+<body>
+    <!-- Navbar starts -->
+    <!-- Secondary Navbar -->
+    <div id="navbar2">
+        <div id="icon2"><a href="/home" style="color:white;">FunJoystick</a></div>
+        <ul id="nav2">
+            <div id="list2">
+                <div class="items2">
+                    <li><a href="/home" class="items2">Home</a></li>
+                </div>
+                <div class="items2">
+                    <li><a href="/playgames" class="items2">Play Games</a></li>
+                </div>
+                <div class="items2">
+                    <li><a href="/downloads" class="items2">Download</a></li>
+                </div>
+                <div class="items2">
+                    <li><a href="/contact" class="items2">Contact Us</a></li>
+                </div>
+            </div>
+        </ul>
+    </div>
+
+    <!-- Primary Navbar -->
+    <div id="navbar">
+
+        <label for="" id="icon"><a href="/home" class="esports" style="color:white;">FunJoystick</a></label>
+
+        <ul id="nav">
+            <div id="list">
+                <div>
+                    <li><a href="/home" class="items">Home</a></li>
+                </div>
+                <div>
+                    <li><a href="/playgames" class="items">Play Games</a></li>
+                </div>
+                <div>
+                    <li><a href="/downloads" class="items">Download</a></li>
+                </div>
+                <div>
+                    <li><a href="/contact" class="items">Contact Us</a></li>
+                </div>
+            </div>
+        </ul>
+    </div>
+
+
+    <!-- Open menu -->
+    <div id="open" onclick="openMenu()">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+    </div>
+
+    <!-- Close menu -->
+    <div id="close" onclick="closeMenu()">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+    </div>
+
+    <a href="/home"><img src="{% static 'img/dark-joystick.png' %}" alt="website icon" id="logo"></a>
+    <!-- Navbar ends -->
+
+    <script src="{% static 'scripts/navbar.js' %}"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,76 @@
+*{
+    padding: 0%;
+    margin: 0%;
+    text-decoration: none;
+    list-style: none;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body{
+    background-image: radial-gradient(circle ,rgb(90, 70, 180) ,rgb(39, 18, 97) ,rgb(20, 8, 73));
+    color: white;
+}
+
+/* Registration form start */
+#form{
+    border: 2px solid white;
+    border-radius: 10px;
+    width: 400px;
+    height: 400px;
+    margin-left: 35vw;
+    margin-top: 60px;
+    background: rgb(22,24,26);
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 20px;
+    color: white;
+    justify-content: center;
+}
+/* Initially hide login and display signup */
+#login{
+    margin-top: 80px;
+    display: flex;
+}
+
+.form_btn{
+    padding: 0px;
+    margin: 0px;
+    
+    border-radius: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    text-align: center;
+    width: 100%;
+}
+.form_btn:hover{
+    background-color: black;
+    border: 1px solid white;
+    color: lawngreen;
+}
+
+.submit{
+    /* margin-left: 65px; */
+    height: 30px;
+    width: 120px;
+    font-size: 20px;
+    color: white;
+    background-color: black;
+    border: 1px solid white;
+    border-radius: 8px;
+}
+.submit:hover{
+    color: lawngreen;
+    height: 32px;
+    width: 122px;
+}
+
+
+
+@media screen and (max-width: 800px) {
+    #form{
+        margin-left: 5vw;
+        margin-right: 5vw;
+        width: 90vw;
+    }
+  }

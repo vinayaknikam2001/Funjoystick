@@ -1,0 +1,128 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Play Games</title>
+    <style>
+        #mainpg{
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .card{
+            margin-left: 20px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border: 3px solid rgb(0, 0, 0);
+            border-radius: 5px;
+            width: fit-content;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            background-color: rgb(51, 51, 53);
+        }
+       
+        
+        .btn{
+            background: rgb(22,24,26);
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+            padding: 6px;
+            border-radius: 5px;
+            margin-bottom: 6px;
+            margin-top: 6px;
+        }
+        .card:hover{
+            border-color: rgb(241, 125, 48);
+        }
+        .play{
+            color: white;
+        }
+        .play:hover{
+            color: lawngreen;
+        }
+        .title{
+            font-size: 20px;
+            color: black;
+            font-style: italic;
+        }
+            
+
+        .pic {
+            border-radius: 35px;
+            padding: 5px;
+            height: 250px;
+            width: 250px;
+        }
+        #sbar{
+            height: 50px;
+            background-color: black;
+            display: flex;
+            align-items: center;
+        }
+        #search{
+            margin-left: 9vw;
+        }
+        #stext{
+            height: 30px;
+            width: 200px;
+            border-radius: 12px;
+            border-color: aqua;
+        }
+        #sbtn{
+            height: 30px;
+            padding-left: 6px;
+            padding-right: 6px;
+            font-size: 15px;
+            border: 2px solid aqua;
+            border-radius: 12px;
+            color: white;
+            background-color: rgb(51, 51, 53);
+        }
+        #sbtn:hover{
+            color: orange;
+            border-color: orange;
+        }
+    </style>
+</head>
+<body>
+
+    {% include 'navbar.html'%}
+
+    <div id="sbar">
+        <form action="searchGames" id="search">
+            <input type="text" name="search" placeholder="  Search Games" id="stext">
+            <button type="submit" id="sbtn">Search</button>
+        </form>
+        
+    </div>
+
+    <div id="mainpg">
+        {% for post in file %}
+
+        <div class="card">
+
+            <img src="{{post.image.url}}" alt="img" class="pic">
+
+            <div class="title">
+                <h3>{{post.name}}</h3>
+            </div>
+            <div class="btn">
+                <a href="{{post.game}}" class="play" >Play</a>
+            </div>
+
+        </div>
+        {% endfor %}
+        
+    </div>
+
+    
+</body>
+</html>
